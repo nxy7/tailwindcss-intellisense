@@ -21,21 +21,12 @@
           #   packagesDir = "./.";
           # };
           packages.default = pkgs.stdenv.mkDerivation {
-            name = "my-webpack-app";
-            src = ./my-app;
+            name = "tailwindcss-language-server";
+            src = ./.;
             buildInputs = with pkgs; [ nodejs ];
-            buildPhase = ''
-              ln -s ${./.}/lib/node_modules ./node_modules
-              export PATH="${./.}/bin:$PATH"
-              ln -s ${
-                ./packages/tailwindcss-language-server
-              }/lib/node_modules ./packages/tailwindcss-language-server/node_modules
-              export PATH="${./packages/tailwindcss-language-server}/bin:$PATH"
-
-              # Build the distribution bundle in "dist"
-              cd packages/tailwindcss-language-server
-              npm run build
-              cp -r bin $out/
+            installPhase = ''
+              mkdir -p $out/bin
+              cp ./bin/* $out/bin
             '';
           };
         };
